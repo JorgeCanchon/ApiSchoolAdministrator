@@ -1,10 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using Autofac;
+using ApiSchoolAdministrator.Core.UseCases.Persona;
 
 namespace ApiSchoolAdministrator.Core
 {
-    public class CoreModule
+    public class CoreModule : Module
     {
+        protected override void Load(ContainerBuilder builder)
+        {
+            builder.RegisterType<PersonaInteractor>().As<IPersonaInteractor>().SingleInstance();
+        }
     }
 }

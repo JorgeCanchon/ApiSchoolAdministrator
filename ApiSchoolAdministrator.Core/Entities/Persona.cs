@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace ApiSchoolAdministrator.Core
+namespace ApiSchoolAdministrator.Core.Entities
 {
     public partial class Persona
     {

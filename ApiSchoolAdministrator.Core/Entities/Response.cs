@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace ApiSchoolAdministrator.Core.Models
+namespace ApiSchoolAdministrator.Core.Entities
 {
     public class Response
     {
