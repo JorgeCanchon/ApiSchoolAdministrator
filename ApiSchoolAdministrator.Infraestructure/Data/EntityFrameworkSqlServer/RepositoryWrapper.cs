@@ -26,9 +26,7 @@ namespace ApiSchoolAdministrator.Infraestructure.Data.EntityFrameworkSqlServer
             }
         }
 
-        public void Save()
-        {
-            throw new NotImplementedException();
-        }
+        public void Save() => 
+            _repositoryContextSqlServer.SaveChanges();
     }
 }

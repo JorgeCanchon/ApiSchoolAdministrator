@@ -34,5 +34,22 @@ namespace ApiSchoolAdministrator.Controllers
                     return NotFound(response);
             }
         }
+
+        [HttpPost]
+        public IActionResult Post(Persona persona)
+        {
+            Response response = _personaInteractor.InsertPerson(persona);
+            switch (response.Status)
+            {
+                case 201:
+                    return Ok(response);
+                case 400:
+                    return BadRequest(response);
+                case 500:
+                    return Problem(response.Message);
+                default:
+                    return NotFound(response);
+            }
+        }
     }
 }

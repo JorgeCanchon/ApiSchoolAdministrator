@@ -50,7 +50,20 @@ namespace ApiSchoolAdministrator.Core.UseCases.Persona
 
         public Response InsertPerson(Entities.Persona person)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var entity = _repositoryWrapper.Persona.Create(person);
+                _repositoryWrapper.Save();
+
+                if (entity.Id >= 0)
+                    return new Response() { Status = 201, Message = "Ruleta creada con éxito", Payload = entity.Id };
+                else
+                    return new Response() { Status = 400, Message = "No se pudo crear la ruleta", Payload = null };
+            }
+            catch (Exception e)
+            {
+                return new Response() { Status = 500, Message = e.Message, Payload = null };
+            }
         }
 
         public Response UpdatePerson(Entities.Persona person)
