@@ -26,7 +26,7 @@ namespace ApiSchoolAdministrator.Infraestructure.Data.EntityFrameworkSqlServer
             }
         }
 
-        public void Save() => 
-            _repositoryContextSqlServer.SaveChanges();
+        public async void Save() => 
+            await _repositoryContextSqlServer.SaveChangesAsync();
     }
 }

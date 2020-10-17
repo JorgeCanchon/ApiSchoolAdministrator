@@ -1,5 +1,6 @@
 ﻿using ApiSchoolAdministrator.Core.Entities;
 using ApiSchoolAdministrator.Core.Interfaces.Repositories;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Linq;
 
@@ -13,19 +14,16 @@ namespace ApiSchoolAdministrator.Core.UseCases.Persona
         {
             _repositoryWrapper = repositoryWrapper ?? throw new ArgumentNullException(nameof(repositoryWrapper));
         }
-        public Response DeletePerson(long Id)
-        {
-            throw new NotImplementedException();
-        }
 
         public Response GetStudent() 
         {
             try
             {
                 var student = _repositoryWrapper.Persona.FindByCondition(x => x.Rol == 1);
-                if (student.Any())
-                    return new Response() { Status = 200, Message = "Ok", Payload = student };
-                return new Response() { Status = 204, Message = "No content", Payload = null };
+
+                return student.Any() ?
+                    new Response() { Status = 200, Message = "Ok", Payload = student }:
+                    new Response() { Status = 204, Message = "No content", Payload = null };
             }
             catch(Exception e) 
             {
@@ -38,9 +36,10 @@ namespace ApiSchoolAdministrator.Core.UseCases.Persona
             try
             {
                 var teachers = _repositoryWrapper.Persona.FindByCondition(x => x.Rol == 0);
-                if (teachers.Any())
-                    return new Response() { Status = 200, Message = "Ok", Payload = teachers };
-                return new Response() { Status = 204, Message = "No content", Payload = null };
+
+                return teachers.Any() ? 
+                    new Response() { Status = 200, Message = "Ok", Payload = teachers } :
+                    new Response() { Status = 204, Message = "No content", Payload = null };
             }
             catch (Exception e)
             {
@@ -53,12 +52,11 @@ namespace ApiSchoolAdministrator.Core.UseCases.Persona
             try
             {
                 var entity = _repositoryWrapper.Persona.Create(person);
-                _repositoryWrapper.Save();
+               // _repositoryWrapper.Save();
 
-                if (entity.Id >= 0)
-                    return new Response() { Status = 201, Message = "Ruleta creada con éxito", Payload = entity.Id };
-                else
-                    return new Response() { Status = 400, Message = "No se pudo crear la ruleta", Payload = null };
+                return entity.Id >= 0 ?
+                     new Response() { Status = 201, Message = "Persona creada con éxito", Payload = person.Id } :
+                     new Response() { Status = 400, Message = "No se pudo crear la persona", Payload = null };
             }
             catch (Exception e)
             {
@@ -68,7 +66,43 @@ namespace ApiSchoolAdministrator.Core.UseCases.Persona
 
         public Response UpdatePerson(Entities.Persona person)
         {
-            throw new NotImplementedException();
+            EntityState result;
+            try
+            {
+                result = _repositoryWrapper.Persona.Update(person, "Id");
+                //_repositoryWrapper.Save();
+                return result == EntityState.Modified ?
+                        new Response() { Status = 200, Message = "Persona modificada con éxito", Payload = null } :
+                        new Response() { Status = 400, Message = "No se pudo modificar la persona", Payload = null };
+            }
+            catch (Exception e)
+            {
+                return new Response() { Status = 500, Message = e.Message, Payload = null };
+            }
+        }
+
+        public Response DeletePerson(long Id)
+        {
+            try
+            {
+                var entity = _repositoryWrapper.Persona
+                            .FindByCondition(x => x.Id == Id)
+                            .FirstOrDefault();
+
+                if(entity == null)
+                   return new Response() { Status = 400, Message = "No se pudo eliminar la persona", Payload = null };
+
+                var result = _repositoryWrapper.Persona.Delete(entity);
+                _repositoryWrapper.Save();
+
+                return result == EntityState.Deleted ?
+                       new Response() { Status = 200, Message = "Persona eliminada con éxito", Payload = entity.Id } :
+                       new Response() { Status = 400, Message = "No se pudo eliminar la persona", Payload = null };
+            }
+            catch (Exception e)
+            {
+                return new Response() { Status = 500, Message = e.Message, Payload = null };
+            }
         }
     }
 }

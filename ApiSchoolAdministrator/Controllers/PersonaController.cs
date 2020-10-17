@@ -2,16 +2,18 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using ApiSchoolAdministrator.Common;
 using ApiSchoolAdministrator.Core.Entities;
 using ApiSchoolAdministrator.Core.UseCases.Persona;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace ApiSchoolAdministrator.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class PersonaController : ControllerBase
+    public class PersonaController : ApiController
     {
         private readonly IPersonaInteractor _personaInteractor;
 
@@ -24,32 +26,33 @@ namespace ApiSchoolAdministrator.Controllers
         public IActionResult GetTeacher()
         {
             Response response = _personaInteractor.GetTeacher();
-            switch (response.Status)
-            {
-                case 204:
-                    return Ok(response);
-                case 500:
-                    return Problem(response.Message);
-                default:
-                    return NotFound(response);
-            }
+            return GetStatus(response.Status, response);
         }
 
         [HttpPost]
         public IActionResult Post(Persona persona)
         {
             Response response = _personaInteractor.InsertPerson(persona);
-            switch (response.Status)
+            return GetStatus(response.Status, response);
+        }
+
+        [HttpPut]
+        public IActionResult Put(Persona person)
+        {
+            if (!ModelState.IsValid)
             {
-                case 201:
-                    return Ok(response);
-                case 400:
-                    return BadRequest(response);
-                case 500:
-                    return Problem(response.Message);
-                default:
-                    return NotFound(response);
+                return BadRequest(ModelState);
             }
+
+            Response response = _personaInteractor.UpdatePerson(person);
+            return GetStatus(response.Status, response);
+        }
+
+        [HttpDelete("{id}")]
+        public IActionResult Delete(long id)
+        {
+            Response response = _personaInteractor.DeletePerson(id);
+            return GetStatus(response.Status, response);
         }
     }
 }
