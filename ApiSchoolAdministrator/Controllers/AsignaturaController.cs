@@ -35,10 +35,10 @@ namespace ApiSchoolAdministrator.Controllers
             return GetStatus(response.Status, response);
         }
 
-        [HttpPatch("{codigo}/{idProfesor}")]
-        public IActionResult Patch(string codigo, int idProfesor)
+        [HttpPatch()]
+        public IActionResult Patch(Asignatura asignatura)
         {
-            Response response = _asignaturaInteractor.AssignSubjectTeacher(codigo, idProfesor);
+            Response response = _asignaturaInteractor.AssignSubjectTeacher(asignatura.Codigo, asignatura.IdProfesor);
             return GetStatus(response.Status, response);
         }
 
@@ -46,6 +46,13 @@ namespace ApiSchoolAdministrator.Controllers
         public IActionResult Post(AlumnoAsignatura alumnoAsignatura)
         {
             Response response = _asignaturaInteractor.InsertStudentSubject(alumnoAsignatura);
+            return GetStatus(response.Status, response);
+        }
+
+        [HttpGet("reportGradebook")]
+        public IActionResult ReportGradebook()
+        {
+            Response response = _asignaturaInteractor.GetReportGradebook();
             return GetStatus(response.Status, response);
         }
     }

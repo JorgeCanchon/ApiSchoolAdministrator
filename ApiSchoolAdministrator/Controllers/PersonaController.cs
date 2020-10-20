@@ -56,7 +56,7 @@ namespace ApiSchoolAdministrator.Controllers
         }
 
         [HttpDelete("{id}")]
-        public IActionResult Delete(long id)
+        public IActionResult Delete(int id)
         {
             Response response = _personaInteractor.DeletePerson(id);
             return GetStatus(response.Status, response);

@@ -10,6 +10,10 @@ namespace ApiSchoolAdministrator.Infraestructure.Data.EntityFrameworkSqlServer
     {
         public IPersonaRepository persona;
 
+        public IAsignaturaRepository asignatura;
+
+        public IAlumnoAsignatura alumnoAsignatura;
+
         private readonly RepositoryContextSqlServer _repositoryContextSqlServer;
 
         public RepositoryWrapper(RepositoryContextSqlServer repositoryContextSqlServer)
@@ -23,6 +27,26 @@ namespace ApiSchoolAdministrator.Infraestructure.Data.EntityFrameworkSqlServer
                 if (persona == null)
                     persona = new PersonaRepository(_repositoryContextSqlServer);
                 return persona;
+            }
+        }
+
+        public IAsignaturaRepository Asignatura
+        {
+            get
+            {
+                if (asignatura == null)
+                    asignatura = new AsignaturaRepository(_repositoryContextSqlServer);
+                return asignatura;
+            }
+        }
+
+        public IAlumnoAsignatura AlumnoAsignatura
+        {
+            get
+            {
+                if (alumnoAsignatura == null)
+                    alumnoAsignatura = new AlumnoAsignaturaRepository(_repositoryContextSqlServer);
+                return alumnoAsignatura;
             }
         }
 

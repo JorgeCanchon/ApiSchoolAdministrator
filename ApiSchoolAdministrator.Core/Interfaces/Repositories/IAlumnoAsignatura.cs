@@ -5,8 +5,8 @@ using System.Text;
 
 namespace ApiSchoolAdministrator.Core.Interfaces.Repositories
 {
-    public interface IPersonaRepository : IRepositoryBase<Persona>
+    public interface IAlumnoAsignatura : IRepositoryBase<AlumnoAsignatura>
     {
-        bool HasSubject(int id);
+        bool HasSubjectYear(int id, int year);
     }
 }

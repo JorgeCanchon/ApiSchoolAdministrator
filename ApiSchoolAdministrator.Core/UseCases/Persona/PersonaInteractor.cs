@@ -81,16 +81,19 @@ namespace ApiSchoolAdministrator.Core.UseCases.Persona
             }
         }
 
-        public Response DeletePerson(long Id)
+        public Response DeletePerson(int id)
         {
             try
             {
                 var entity = _repositoryWrapper.Persona
-                            .FindByCondition(x => x.Id == Id)
+                            .FindByCondition(x => x.Id == id)
                             .FirstOrDefault();
 
                 if(entity == null)
-                   return new Response() { Status = 400, Message = "No se pudo eliminar la persona", Payload = null };
+                   return new Response() { Status = 400, Message = $"No se existe la persona con id:{id}", Payload = null };
+
+                if (_repositoryWrapper.Persona.HasSubject(id))
+                    return new Response() { Status = 400, Message = $"El alumno {entity.Nombre} tiene asignaturas asociadas", Payload = null };
 
                 var result = _repositoryWrapper.Persona.Delete(entity);
                 _repositoryWrapper.Save();

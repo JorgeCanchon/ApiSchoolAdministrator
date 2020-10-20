@@ -13,6 +13,6 @@ namespace ApiSchoolAdministrator.Core.UseCases.Persona
         Response GetStudent();
         Response InsertPerson(Entities.Persona person);
         Response UpdatePerson(Entities.Persona person);
-        Response DeletePerson(long Id);
+        Response DeletePerson(int Id);
     }
 }
