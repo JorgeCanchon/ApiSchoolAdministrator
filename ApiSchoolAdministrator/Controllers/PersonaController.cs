@@ -29,6 +29,13 @@ namespace ApiSchoolAdministrator.Controllers
             return GetStatus(response.Status, response);
         }
 
+        [HttpGet("student")]
+        public IActionResult GetStudent()
+        {
+            Response response = _personaInteractor.GetStudent();
+            return GetStatus(response.Status, response);
+        }
+
         [HttpPost]
         public IActionResult Post(Persona persona)
         {
