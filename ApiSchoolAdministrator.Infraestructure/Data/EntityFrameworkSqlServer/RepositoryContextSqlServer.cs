@@ -20,15 +20,21 @@ namespace ApiSchoolAdministrator.Infraestructure.Data.EntityFrameworkSqlServer
         public virtual DbSet<AlumnoAsignatura> AlumnoAsignatura { get; set; }
         public virtual DbSet<Asignatura> Asignatura { get; set; }
         public virtual DbSet<Persona> Persona { get; set; }
+        public virtual DbSet<ReportGradebookViewModel> ReportGradebook { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
             if (modelBuilder != null)
             {
-                modelBuilder.Entity<AlumnoAsignatura>(entity =>
+                modelBuilder.Entity<ReportGradebookViewModel>(entity =>
                 {
                     entity.HasNoKey();
+                });
+
+                modelBuilder.Entity<AlumnoAsignatura>(entity =>
+                {
+                    entity.HasKey(x => new { x.IdAlumno, x.IdProfesor });
 
                     entity.Property(e => e.CodigoAsignatura)
                         .IsRequired()

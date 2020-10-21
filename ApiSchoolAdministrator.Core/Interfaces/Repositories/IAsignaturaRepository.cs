@@ -1,12 +1,13 @@
 ﻿using ApiSchoolAdministrator.Core.Entities;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace ApiSchoolAdministrator.Core.Interfaces.Repositories
 {
-    public interface IPersonaRepository : IRepositoryBase<Persona>
+    public interface IAsignaturaRepository : IRepositoryBase<Asignatura>
     {
-        bool HasSubject(int id);
+        IQueryable<ReportGradebookViewModel> GetReportGradebook();
     }
 }

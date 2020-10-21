@@ -29,6 +29,13 @@ namespace ApiSchoolAdministrator.Controllers
             return GetStatus(response.Status, response);
         }
 
+        [HttpGet("student")]
+        public IActionResult GetStudent()
+        {
+            Response response = _personaInteractor.GetStudent();
+            return GetStatus(response.Status, response);
+        }
+
         [HttpPost]
         public IActionResult Post(Persona persona)
         {
@@ -49,7 +56,7 @@ namespace ApiSchoolAdministrator.Controllers
         }
 
         [HttpDelete("{id}")]
-        public IActionResult Delete(long id)
+        public IActionResult Delete(int id)
         {
             Response response = _personaInteractor.DeletePerson(id);
             return GetStatus(response.Status, response);
