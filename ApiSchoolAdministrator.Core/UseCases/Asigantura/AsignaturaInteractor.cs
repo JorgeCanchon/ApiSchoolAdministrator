@@ -57,7 +57,21 @@ namespace ApiSchoolAdministrator.Core.UseCases.Asigantura
         {
             try
             {
-                var subject = _repositoryWrapper.Asignatura.FindAll().ToList();
+                var subject = _repositoryWrapper.Asignatura
+                    .FindAll()
+                    .Include(x => x.Persona)
+                    .Select(x => new Asignatura()
+                    {
+                        Codigo = x.Codigo,
+                        Nombre = x.Nombre,
+                        IdProfesor = x.IdProfesor,
+                        Persona = new Entities.Persona() {
+                            Id = x.Persona.Id,
+                            Identificacion = x.Persona.Identificacion,
+                            Nombre =  x.Persona.Nombre,
+                            Apellido = x.Persona.Apellido
+                        }
+                    }); 
 
                 return subject.Any() ?
                     new Response() { Status = 200, Message = "Ok", Payload = subject } :
@@ -75,7 +89,7 @@ namespace ApiSchoolAdministrator.Core.UseCases.Asigantura
             {
                 if(_repositoryWrapper.AlumnoAsignatura.HasSubjectYear(alumnoAsignatura.IdAlumno, alumnoAsignatura.Anio))
                     return new Response() { 
-                        Status = 400, 
+                        Status = 202, 
                         Message = $"Él alumno ya tiene una asignación para el año {alumnoAsignatura.Anio}", 
                         Payload = null 
                     };
@@ -84,7 +98,7 @@ namespace ApiSchoolAdministrator.Core.UseCases.Asigantura
 
                 return entity.IdAlumno >= 0 ?
                      new Response() { Status = 201, Message = "Asignación exitosa", Payload = alumnoAsignatura } :
-                     new Response() { Status = 400, Message = "No se pudo realizar la asignación", Payload = null };
+                     new Response() { Status = 202, Message = "No se pudo realizar la asignación", Payload = null };
             }
             catch (Exception e)
             {

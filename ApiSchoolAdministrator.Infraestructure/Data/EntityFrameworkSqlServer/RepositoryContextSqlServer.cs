@@ -85,6 +85,10 @@ namespace ApiSchoolAdministrator.Infraestructure.Data.EntityFrameworkSqlServer
                         .IsRequired()
                         .HasMaxLength(150)
                         .IsUnicode(false);
+
+                    entity.HasOne<Asignatura>(p => p.Asignatura)
+                    .WithOne(a => a.Persona)
+                    .HasForeignKey<Asignatura>(a => a.IdProfesor);
                 });
 
                 modelBuilder.HasAnnotation("Sqlite:Autoincrement", true)

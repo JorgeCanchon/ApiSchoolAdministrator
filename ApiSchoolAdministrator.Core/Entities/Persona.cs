@@ -13,5 +13,7 @@ namespace ApiSchoolAdministrator.Core.Entities
         public string Direccion { get; set; }
         public long Telefono { get; set; }
         public short Rol { get; set; }
+
+        public Asignatura Asignatura { get; set; }
     }
 }

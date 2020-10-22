@@ -90,17 +90,17 @@ namespace ApiSchoolAdministrator.Core.UseCases.Persona
                             .FirstOrDefault();
 
                 if(entity == null)
-                   return new Response() { Status = 400, Message = $"No se existe la persona con id:{id}", Payload = null };
+                   return new Response() { Status = 202, Message = $"No se existe la persona con id:{id}", Payload = null };
 
                 if (_repositoryWrapper.Persona.HasSubject(id))
-                    return new Response() { Status = 400, Message = $"El alumno {entity.Nombre} tiene asignaturas asociadas", Payload = null };
+                    return new Response() { Status = 202, Message = $"El alumno {entity.Nombre} tiene asignaturas asociadas", Payload = null };
 
                 var result = _repositoryWrapper.Persona.Delete(entity);
                 _repositoryWrapper.Save();
 
                 return result == EntityState.Deleted ?
                        new Response() { Status = 200, Message = "Persona eliminada con éxito", Payload = entity.Id } :
-                       new Response() { Status = 400, Message = "No se pudo eliminar la persona", Payload = null };
+                       new Response() { Status = 202, Message = "No se pudo eliminar la persona", Payload = null };
             }
             catch (Exception e)
             {

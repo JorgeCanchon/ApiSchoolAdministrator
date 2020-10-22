@@ -21,7 +21,7 @@ namespace ApiSchoolAdministrator.Controllers
             _asignaturaInteractor = asignaturaInteractor ?? throw new ArgumentNullException(nameof(asignaturaInteractor));
         }
 
-        [HttpGet()]
+        [HttpGet]
         public IActionResult GetSubject()
         {
             Response response = _asignaturaInteractor.GetSubjects();

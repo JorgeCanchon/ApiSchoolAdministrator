@@ -13,7 +13,8 @@ namespace ApiSchoolAdministrator.Infraestructure.Extensions
             services.AddDbContext<RepositoryContextSqlServer>(
                    options => options.UseSqlServer(config.GetConnectionString("SqlServerDBContext"), npgsqlOptions => {
                        npgsqlOptions.CommandTimeout(60);
-                   })
+                   }),
+                   ServiceLifetime.Transient
                );
         }
 
