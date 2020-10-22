@@ -1,0 +1,78 @@
+CREATE DATABASE SchoolAdministrator
+GO
+CREATE TABLE Persona (
+	Id INT PRIMARY KEY IDENTITY(1,1),
+	Identificacion BIGINT NOT NULL,
+	Nombre VARCHAR(150) NOT NULL,
+	Apellido VARCHAR(150) NOT NULL,
+	Edad SMALLINT NOT NULL,
+	Direccion VARCHAR(150) NOT NULL,
+	Telefono BIGINT NOT NULL,
+	Rol SMALLINT NOT NULL
+)
+GO
+CREATE TABLE Asignatura (
+	Codigo VARCHAR(150) PRIMARY KEY,
+	Nombre VARCHAR(150) NOT NULL,
+	IdProfesor INT NULL
+)
+GO
+CREATE TABLE AlumnoAsignatura (
+	IdAlumno INT NOT NULL,
+	IdProfesor INT NOT NULL,
+	Anio INT NOT NULL,
+	CodigoAsignatura VARCHAR(150) NOT NULL,
+	Calificacion REAL NOT NULL,
+	FOREIGN KEY (IdAlumno) REFERENCES Persona (Id),
+	FOREIGN KEY (IdProfesor) REFERENCES Persona (Id),
+);
+
+
+INSERT INTO Persona (Identificacion, Nombre, Apellido, Edad, Direccion, Telefono, Rol)
+VALUES ('1020831722', 'Jorge Luis', 'Canchon', 22, 'Carrera 6a#188c36int1', '3112711335', 0),
+		('101950555', 'Alejandra', 'Gracia', 22, 'Carrera 11 #180', '3112711336', 1)
+
+INSERT INTO Asignatura (Codigo, Nombre)
+VALUES ('102058', 'Desarrollo de Software')
+
+INSERT INTO AlumnoAsignatura (IdAlumno, IdProfesor, Anio, CodigoAsignatura, Calificacion)
+VALUES (2, 1, 2020, '102058', 2)
+
+
+SELECT *
+FROM Persona
+
+
+USE [SchoolAdministrator]
+GO
+/****** Object:  StoredProcedure [dbo].[GetGradeBook]    Script Date: 20/10/2020 3:39:56 p. m. ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+-- =============================================
+-- Author:		Jorge Canchon
+-- Create date: 19/10/2020
+-- Description:	Reporte de calificaciones
+-- =============================================
+ALTER PROCEDURE [dbo].[GetGradeBook]
+AS
+BEGIN
+	SELECT 
+		A.Anio [AñoAcademico], 
+		Al.Identificacion [IdentificacionAlumno], 
+		CONCAT(Al.Nombre, ' ',AL.Apellido) [NombreAlumno],
+		Ag.Codigo,
+		Ag.Nombre,
+		P.Identificacion [IdentificacionProfesor],
+		CONCAT(P.Nombre, ' ', P.Apellido) [NombreProfesor],
+		A.Calificacion,
+		CASE 
+			WHEN A. Calificacion < 3 THEN 'No'
+		ELSE 'Si' END [Aprobo]
+	FROM AlumnoAsignatura A WITH(NOLOCK)
+	JOIN Persona P WITH(NOLOCK) ON P.Id = A.IdProfesor
+	JOIN Persona Al WITH(NOLOCK) ON Al.Id = A.IdAlumno
+	JOIN Asignatura Ag WITH(NOLOCK) ON Ag.Codigo = A.CodigoAsignatura 
+END
+
